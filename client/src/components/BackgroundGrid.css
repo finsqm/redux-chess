@@ -1,0 +1,21 @@
+.backgroundgrid__square {
+    width: 64px;
+    height: 64px;
+    /* grid area set in js */
+}
+
+.backgroundgrid__row {
+    list-style-type: none;
+}
+
+.backgroundgrid__fullgrid {
+    list-style-type: none;
+}
+
+.backgroundgrid__square--dark {
+    background-color: rgb(119,149,89);
+}
+
+.backgroundgrid__square--light {
+    background-color: rgb(238,238,211);
+}
