@@ -1,4 +1,5 @@
 import React from 'react';
+import { DragSource } from 'react-dnd';
 
 import './Pieces.css';
 
@@ -49,7 +50,7 @@ const pieces = [
   bishops,
 );
 
-const renderPiece = (piece, player, square) => {
+const Piece = (piece, player, square) => {
   const style = {
     gridArea: square,
   };
@@ -67,7 +68,13 @@ const renderPiece = (piece, player, square) => {
 };
 
 const getPieces = (locations, player) => (
-  pieces.map(piece => renderPiece(piece, player, locations[piece]))
+  pieces.map(piece => (
+    <Piece
+      piece={piece}
+      player={player}
+      square={locations[piece]}
+    />
+  ))
 );
 
 export default getPieces;
