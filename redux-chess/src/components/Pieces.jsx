@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './Pieces.css';
+
 import blackBishop from './sprites/black_bishop.svg';
 import blackKing from './sprites/black_king.svg';
 import blackKnight from './sprites/black_knight.svg';
@@ -33,10 +35,10 @@ const svgs = {
   },
 };
 
-const pawns = Array(8).fill('pawn');
-const rooks = Array(2).fill('rook');
-const knights = Array(2).fill('knight');
-const bishops = Array(2).fill('bishop');
+const pawns = Array(8).fill('pawn').map((piece, i) => (`${piece}${i}`));
+const rooks = Array(2).fill('rook').map((piece, i) => (`${piece}${i}`));
+const knights = Array(2).fill('knight').map((piece, i) => (`${piece}${i}`));
+const bishops = Array(2).fill('bishop').map((piece, i) => (`${piece}${i}`));
 const pieces = [
   'queen',
   'king',
@@ -47,23 +49,25 @@ const pieces = [
   bishops,
 );
 
-const renderPiece = (piece, player) => {
+const renderPiece = (piece, player, square) => {
   const style = {
-    gridArea: 'a1',
+    gridArea: square,
   };
   const id = `${player}-${piece}`;
+  const pieceName = piece.replace(/\d/, '');
   return (
     <img
-      src={svgs[player][piece]}
+      src={svgs[player][pieceName]}
       alt={id}
       key={id}
       style={style}
+      className={`piece piece--${pieceName}`}
     />
   );
 };
 
-const getPieces = player => (
-  pieces.map(piece => renderPiece(piece, player))
+const getPieces = (locations, player) => (
+  pieces.map(piece => renderPiece(piece, player, locations[piece]))
 );
 
 export default getPieces;

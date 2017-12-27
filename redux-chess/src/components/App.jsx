@@ -1,10 +1,12 @@
 import React from 'react';
+
+import Chess from './containers/Chess';
+
 import './App.css';
-import ChessBoard from './ChessBoard';
 
 const App = () => (
   <div className="App">
-    <ChessBoard />
+    <Chess />
   </div>
 );
 
