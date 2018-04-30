@@ -1,6 +1,9 @@
 import { createAction, handleAction } from 'redux-actions';
+import forOwn from 'lodash/forOwn';
 
 const MOUNT_POINT = 'board';
+
+export const PIECES = ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king'];
 
 // Actions
 export const MOVE_PIECE = 'redux-chess/board/MOVE_PIECE';
@@ -65,8 +68,10 @@ const reducer = handleAction(MOVE_PIECE, (
     ...state,
     pieces:
       {
+        ...state.pieces,
         [player]:
           {
+            ...state.pieces[player],
             [pieceId]: square,
           },
       },
@@ -75,6 +80,25 @@ const reducer = handleAction(MOVE_PIECE, (
 
 export default reducer;
 
-export const getPieceLocation = state => (
+export const getLocationOfPieces = state => (
   state[MOUNT_POINT].pieces
 );
+
+export const getLocationOfPiece = (pieceId, player, state) => (
+  state[MOUNT_POINT].pieces[player][pieceId]
+);
+
+// Assumes only one piece in each square
+export const getPieceInLocation = (location, state) => {
+  const things = {};
+  forOwn(state[MOUNT_POINT].pieces, (value, key) => {
+    const player = key;
+    forOwn(value, (position, pieceId) => {
+      if (location === position) {
+        things.player = player;
+        things.pieceId = pieceId;
+      }
+    });
+  });
+  return things;
+};

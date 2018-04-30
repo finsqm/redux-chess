@@ -1,10 +1,23 @@
 import { connect } from 'react-redux';
 import ChessBoard from '../ChessBoard';
 
-import { getPieceLocation } from '../../ducks/board';
+import { getLocationOfPieces, movePiece } from '../../ducks/board';
 
 const mapStateToProps = state => ({
-  pieces: getPieceLocation(state),
+  pieces: getLocationOfPieces(state),
 });
 
-export default connect(mapStateToProps)(ChessBoard);
+const mapDispatchToProps = dispatch => ({
+  movePiece: (player, pieceId, square) => {
+    dispatch(movePiece({
+      player,
+      pieceId,
+      square,
+    }));
+  },
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ChessBoard);
