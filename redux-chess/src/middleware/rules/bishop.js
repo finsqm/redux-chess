@@ -3,17 +3,24 @@ import range from 'lodash/range';
 
 import { getLocationByTranslation } from './utils';
 
-const isValidActionForBishop = (pastLocation, newLocation, player, isCapturing) => {
-  if (isCapturing) {
-    return false;
-  }
-  const bishopMove = {
+const getTranslations = (multipliers, bishopStep) => (
+  multipliers.map(mult => mapValues(bishopStep, pos => pos * mult))
+);
+
+const isValidActionForBishop = (pastLocation, newLocation, player) => {
+  const bishopStepNE = {
     x: 1,
+    y: 1,
+  };
+  const bishopStepNW = {
+    x: -1,
     y: 1,
   };
   let multipliers = range(1, 9);
   multipliers = multipliers.concat(multipliers.map(mult => -1 * mult));
-  const validTranslations = multipliers.map(mult => mapValues(bishopMove, pos => pos * mult));
+  const validTranslationsNE = getTranslations(multipliers, bishopStepNE);
+  const validTranslationsNW = getTranslations(multipliers, bishopStepNW);
+  const validTranslations = validTranslationsNE.concat(validTranslationsNW);
   const validLocations = validTranslations.map(({ x, y }) => (
     getLocationByTranslation(pastLocation, x, y, player)
   ));

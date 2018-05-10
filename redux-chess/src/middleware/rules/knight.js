@@ -1,9 +1,6 @@
 import { getLocationByTranslation } from './utils';
 
-const isValidActionForKnight = (pastLocation, newLocation, player, isCapturing) => {
-  if (isCapturing) {
-    return false;
-  }
+const isValidActionForKnight = (pastLocation, newLocation, player) => {
   const validTranslations = [
     {
       x: 1,
