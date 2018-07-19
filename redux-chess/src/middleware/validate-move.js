@@ -7,6 +7,7 @@ import isValidActionForKing from './rules/king';
 import isValidActionForKnight from './rules/knight';
 import isValidActionForRook from './rules/rook';
 import isValidActionForQueen from './rules/queen';
+import { isPathBlocked } from './rules/utils';
 
 const isValidActionByPieceType = {
   pawn: isValidActionForPawn,
@@ -26,8 +27,11 @@ const isValidAction = ({ payload }, state) => {
     // Square occupied by player's own piece
     return false;
   }
-  const pieceType = PIECES.filter(p => pieceId.includes(p))[0];
   const oldLocation = getLocationOfPiece(pieceId, player, state);
+  if (isPathBlocked(oldLocation, square, state, player)) {
+    return false;
+  }
+  const pieceType = PIECES.filter(p => pieceId.includes(p))[0];
   return isValidActionByPieceType[pieceType](oldLocation, square, player, isCapturing);
 };
 

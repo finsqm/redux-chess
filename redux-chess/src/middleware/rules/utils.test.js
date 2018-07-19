@@ -1,6 +1,6 @@
 import { range, zip } from 'lodash';
 
-import { getChessFromCartesian, getCartesianFromChess, getLocationByTranslation } from './utils';
+import { getChessFromCartesian, getCartesianFromChess, getLocationByTranslation, isPathBlocked } from './utils';
 
 const correctMappings = [
   [1, 1, 'a1'],
@@ -83,4 +83,22 @@ test('getLocationByTranslation translates properly', () => {
     expect(getLocationByTranslation(t.start, t.x, t.y))
       .toEqual(t.end);
   });
+});
+
+
+test('isPathBlocked returns true if path is blocked', () => {
+  const player = 'white';
+  const startingSquare = 'a1';
+  const goalSquare = 'c3';
+  const blockingSquare = 'b2';
+  const mockState = {
+    board: {
+      pieces: {
+        white: {
+          queen: blockingSquare,
+        },
+      },
+    },
+  };
+  expect(isPathBlocked(startingSquare, goalSquare, mockState, player)).toBeTruthy();
 });

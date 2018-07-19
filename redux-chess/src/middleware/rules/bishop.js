@@ -16,14 +16,19 @@ const isValidActionForBishop = (pastLocation, newLocation, player) => {
     x: -1,
     y: 1,
   };
+
   let multipliers = range(1, 9);
+  // include negative multipliers for SW and SE moves
   multipliers = multipliers.concat(multipliers.map(mult => -1 * mult));
+
   const validTranslationsNE = getTranslations(multipliers, bishopStepNE);
   const validTranslationsNW = getTranslations(multipliers, bishopStepNW);
   const validTranslations = validTranslationsNE.concat(validTranslationsNW);
+
   const validLocations = validTranslations.map(({ x, y }) => (
     getLocationByTranslation(pastLocation, x, y, player)
   ));
+
   return validLocations.includes(newLocation);
 };
 
