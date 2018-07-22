@@ -1,15 +1,15 @@
-import isValidActionForRook from './rook';
+import isValidActionForQueen from './queen';
 import { movePiece } from '../../ducks/board';
 import validateMove from '../validate-move';
 
-const validRookMoves = [
+const validQueenMoves = [
   [
     'a1',
     'a2',
   ],
   [
     'a1',
-    'b1',
+    'b2',
   ],
   [
     'a1',
@@ -17,7 +17,7 @@ const validRookMoves = [
   ],
   [
     'a1',
-    'h1',
+    'h8',
   ],
   [
     'h1',
@@ -25,39 +25,39 @@ const validRookMoves = [
   ],
   [
     'h1',
-    'h8',
+    'a8',
   ],
   [
     'e5',
-    'e6',
+    'f6',
   ],
   [
     'd4',
-    'c4',
+    'c3',
   ],
 ];
 
-describe('should validate real rook moves for both players', () => {
-  validRookMoves.forEach((move) => {
+describe('should validate real queen moves for both players', () => {
+  validQueenMoves.forEach((move) => {
     test('for white uncapturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'white', false)).toBeTruthy();
+      expect(isValidActionForQueen(move[0], move[1], 'white', false)).toBeTruthy();
     });
     test('for black uncapturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'black', false)).toBeTruthy();
+      expect(isValidActionForQueen(move[0], move[1], 'black', false)).toBeTruthy();
     });
     test('for white capturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'white', true)).toBeTruthy();
+      expect(isValidActionForQueen(move[0], move[1], 'white', true)).toBeTruthy();
     });
     test('for black capturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'black', true)).toBeTruthy();
+      expect(isValidActionForQueen(move[0], move[1], 'black', true)).toBeTruthy();
     });
   });
 });
 
-const invalidRookMoves = [
+const invalidQueenMoves = [
   [
     'a1',
-    'b2',
+    'd2',
   ],
   [
     'a1',
@@ -65,7 +65,7 @@ const invalidRookMoves = [
   ],
   [
     'a1',
-    'h8',
+    'f8',
   ],
   [
     'a1',
@@ -73,25 +73,25 @@ const invalidRookMoves = [
   ],
 ];
 
-describe('should invalidate bad rook moves for both players', () => {
-  invalidRookMoves.forEach((move) => {
+describe('should invalidate bad queen moves for both players', () => {
+  invalidQueenMoves.forEach((move) => {
     test('for white uncapturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'white', false)).toBeFalsy();
+      expect(isValidActionForQueen(move[0], move[1], 'white', false)).toBeFalsy();
     });
     test('for black uncapturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'black', false)).toBeFalsy();
+      expect(isValidActionForQueen(move[0], move[1], 'black', false)).toBeFalsy();
     });
     test('for white capturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'white', true)).toBeFalsy();
+      expect(isValidActionForQueen(move[0], move[1], 'white', true)).toBeFalsy();
     });
     test('for black capturing', () => {
-      expect(isValidActionForRook(move[0], move[1], 'black', true)).toBeFalsy();
+      expect(isValidActionForQueen(move[0], move[1], 'black', true)).toBeFalsy();
     });
   });
 });
 
 
-describe('rooks should be blocked by something in their path', () => {
+describe('queens should be blocked by something in their path', () => {
   const setup = (mockState) => {
     const store = {
       getState() { return mockState; },
@@ -107,7 +107,7 @@ describe('rooks should be blocked by something in their path', () => {
         pieces: {
           white: {
             pawn0: 'a2',
-            rook0: 'a1',
+            queen: 'a1',
           },
         },
       },
@@ -115,10 +115,11 @@ describe('rooks should be blocked by something in their path', () => {
     const { next, invoke } = setup(mockState);
     const attemptedAction = movePiece({
       player: 'white',
-      pieceId: 'rook0',
+      pieceId: 'queen',
       square: 'a3',
     });
     invoke(attemptedAction);
     expect(next).toHaveBeenCalledTimes(0);
   });
 });
+

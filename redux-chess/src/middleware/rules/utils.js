@@ -46,7 +46,7 @@ export const getSquaresInBetween = (oldLocation, newLocation, player) => {
   const normX = xDirection / Math.abs(xDirection) || 0;
   const normY = yDirection / Math.abs(yDirection) || 0;
 
-  const isOnDiagonal = Math.abs(normX / normY) === 1;
+  const isOnDiagonal = Math.abs(xDirection / yDirection) === 1;
   const isVertOrHoriz = normX === 0 || normY === 0;
   if (!isOnDiagonal && !isVertOrHoriz) {
     return [];
