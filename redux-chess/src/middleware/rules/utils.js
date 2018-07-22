@@ -1,5 +1,8 @@
+import flatMap from 'lodash/flatMap';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
+import mapValues from 'lodash/mapValues';
+import range from 'lodash/range';
 
 import { getPieceInLocation } from '../../ducks/board';
 
@@ -40,13 +43,14 @@ export const getSquaresInBetween = (oldLocation, newLocation, player) => {
   const xDirection = newLocationCartesian.x - oldLocationCartesian.x;
   const yDirection = newLocationCartesian.y - oldLocationCartesian.y;
 
-  const isOnDiagonal = Math.abs(xDirection / yDirection) === 1;
-  if (!isOnDiagonal) {
+  const normX = xDirection / Math.abs(xDirection) || 0;
+  const normY = yDirection / Math.abs(yDirection) || 0;
+
+  const isOnDiagonal = Math.abs(normX / normY) === 1;
+  const isVertOrHoriz = normX === 0 || normY === 0;
+  if (!isOnDiagonal && !isVertOrHoriz) {
     return [];
   }
-
-  const normX = xDirection / Math.abs(xDirection);
-  const normY = yDirection / Math.abs(yDirection);
 
   const squaresInBetween = [];
   const square = { x: oldLocationCartesian.x, y: oldLocationCartesian.y };
@@ -65,9 +69,29 @@ export const isPathBlocked = (oldLocation, newLocation, state, player) => {
   if (squaresInBetween.length === 0) {
     return false;
   }
-  const anyEmpty = squaresInBetween.some((square) => {
+  const anyOccupied = squaresInBetween.some((square) => {
     const pieceInLocation = getPieceInLocation(square, state);
-    return isEmpty(pieceInLocation);
+    return !isEmpty(pieceInLocation);
   });
-  return !anyEmpty;
+  return anyOccupied;
+};
+
+export const getTranslationsFromStep = (multipliers, step) => (
+  multipliers.map(mult => mapValues(step, pos => pos * mult))
+);
+
+export const isValidActionForLongMover = (pastLocation, newLocation, positiveSteps, player) => {
+  let multipliers = range(1, 9);
+  // include negative multipliers for negative moves
+  multipliers = multipliers.concat(multipliers.map(mult => -1 * mult));
+
+  const validTranslations = flatMap(positiveSteps, step => (
+    getTranslationsFromStep(multipliers, step)
+  ));
+
+  const validLocations = validTranslations.map(({ x, y }) => (
+    getLocationByTranslation(pastLocation, x, y, player)
+  ));
+
+  return validLocations.includes(newLocation);
 };

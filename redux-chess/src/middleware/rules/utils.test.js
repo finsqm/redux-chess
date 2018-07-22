@@ -88,17 +88,33 @@ test('getLocationByTranslation translates properly', () => {
 
 test('isPathBlocked returns true if path is blocked', () => {
   const player = 'white';
-  const startingSquare = 'a1';
-  const goalSquare = 'c3';
-  const blockingSquare = 'b2';
-  const mockState = {
-    board: {
-      pieces: {
-        white: {
-          queen: blockingSquare,
+  const setUps = [
+    {
+      startingSquare: 'a1',
+      goalSquare: 'c3',
+      blockingSquare: 'b2',
+    },
+    {
+      startingSquare: 'a1',
+      goalSquare: 'a3',
+      blockingSquare: 'a2',
+    },
+  ];
+  setUps.forEach((setUp) => {
+    const mockState = {
+      board: {
+        pieces: {
+          white: {
+            queen: setUp.blockingSquare,
+          },
         },
       },
-    },
-  };
-  expect(isPathBlocked(startingSquare, goalSquare, mockState, player)).toBeTruthy();
+    };
+    expect(isPathBlocked(
+      setUp.startingSquare,
+      setUp.goalSquare,
+      mockState,
+      player,
+    )).toBeTruthy();
+  });
 });
